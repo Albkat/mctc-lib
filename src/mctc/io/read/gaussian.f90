@@ -38,8 +38,11 @@ subroutine read_gaussian_external(self, unit, error)
    !> Error handling
    type(error_type), allocatable, intent(out) :: error
 
-   integer :: stat, n, mode, chrg, spin, iat, ii, pos, lnum
+   integer :: stat, n, mode, chrg, spin, iat, ii, pos
+   integer :: lnum
+      !! current line number
    type(token_type) :: token, tnat
+      !! token text (begin,end)
    character(len=:), allocatable :: line
    integer, allocatable :: at(:)
    real(wp), allocatable :: xyz(:,:)
@@ -47,10 +50,12 @@ subroutine read_gaussian_external(self, unit, error)
 
    lnum = 0
    call next_line(unit, line, pos, lnum, stat)
+      !! to read a line, und update lnum and assign stat=0 if success
    if (stat == 0) then
       token = token_type(1, 10)
       tnat = token
       call read_token(line, token, n, stat)
+         !! to get value from token
    end if
    if (stat == 0) then
       token = token_type(11, 20)
